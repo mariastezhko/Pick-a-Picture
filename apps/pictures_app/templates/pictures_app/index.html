@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Pick a Picture</title>
+  </head>
+  <body>
+    ok
+
+    {% for image in images %}
+      ok
+      <img class="image" src="{{ image.image.name }}" alt="{{ image.image.name }}">
+    {% endfor %}
+
+
+  </body>
+</html>

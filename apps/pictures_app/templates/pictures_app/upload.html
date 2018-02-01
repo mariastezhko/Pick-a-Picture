@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Upload pictures</title>
+  </head>
+  <body>
+    {% if messages %}
+      {% for message in messages %}
+        {{ message.message }}
+      {% endfor %}
+    {% endif %}
+
+    <form action='/submitcriteria' method='post'>
+      {% csrf_token %}
+      Name: <input type='text' name='name' required>
+      <input type='submit' value='Add Criteria'>
+    </form>
+
+    <form action='/submitsubcategory' method='post'>
+      {% csrf_token %}
+      Name: <input type='text' name='name'  required>
+      Category: <input type='text' name='criteria' required>
+      <input type='submit' value='Add Subategory'>
+    </form>
+
+    <form action='/submitimage' method='post' enctype="multipart/form-data">
+      {% csrf_token %}
+      Upload Image: <input type="file" name="image" required>
+      Name: <input type='text' name='name'  required>
+      Subcategory: <input type='text' name='subcategory' required>
+      <input type='submit' value='Add Image'>
+    </form>
+
+  </body>
+</html>
