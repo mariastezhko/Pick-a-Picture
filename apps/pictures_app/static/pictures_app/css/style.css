@@ -1,0 +1,274 @@
+* {
+ margin: 0px;
+ padding: 0px;
+}
+
+#bubble-container {
+  width: 250px;
+  height: 120px;
+  padding:0 0 10px;
+  margin:0 auto;
+}
+
+#main p {
+  color: #f3961c;
+  text-align: right;
+}
+
+@media only screen and (max-width: 480px) {
+  #wrapper {
+    width: 100%;
+  }
+
+  .pick-image {
+    max-height: 250px;
+    margin-left: 10px;
+  }
+
+  .oval-speech-border {
+    position:relative;
+    top: 15px;
+    left: 50px;
+
+  }
+
+  form {
+    position: relative;
+    left: 300px;
+    bottom: 80px;
+    width: 45px;
+  }
+
+  #finch {
+    margin-left: 50px;
+    max-height: 150px;
+  }
+
+}
+
+@media only screen and (min-width: 481px) and (max-width: 1023px){
+  #wrapper {
+    width: 100%;
+  }
+
+  #bubble-container {
+    width: 250px;
+    height: 120px;
+    padding:0 0 10px;
+    margin-left: 100px;
+  }
+
+  .oval-speech-border {
+    position:relative;
+    top: 15px;
+    left: 100px;
+
+  }
+
+  .pick-image {
+    max-height: 500px;
+    margin-left: 10px;
+  }
+
+  #bird {
+    height: 320px;
+  }
+
+  #finch {
+    margin-left: 70px;
+    max-height: 200px;
+  }
+
+  .pick-image {
+    height: auto;
+    width: auto;
+    max-height: 470px;
+    border-width: thin;
+    border-color: black;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  #main {
+    width: 780px;
+    margin-left: 100px;
+    cursor: pointer;
+  }
+
+  form {
+    position: relative;
+    left: 700px;
+    bottom: 80px;
+    width: 45px;
+  }
+
+}
+
+@media only screen and (min-width: 1024px) {
+  #wrapper {
+   width: 1200px;
+   margin: auto;
+   padding-top: 50px;
+  }
+
+  .oval-speech-border {
+    position:relative;
+    top: 15px;
+    left: 80px;
+  }
+
+  .section {
+    display: inline-block;
+  }
+
+  #main {
+    width: 650px;
+    margin-top: 50px;
+    cursor: pointer;
+  }
+
+  #bird {
+    width: 500px;
+    margin-left: 20px;
+    vertical-align: top;
+  }
+
+  #finch {
+    margin-bottom: 220px;
+  }
+
+  .pick-image {
+    height: auto;
+    width: auto;
+    max-width: 300px;
+    border-width: thin;
+    border-color: black;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  form {
+    position: relative;
+    left: 50px;
+    bottom: 200px;
+    width: 45px;
+  }
+
+
+}
+
+.oval-speech-border {
+  /*position:relative;
+  top: 15px;
+  left: 80px;*/
+  padding:20px 10px;
+  margin:1em auto 60px;
+  border:10px solid #f3961c;
+  text-align:center;
+  color:#333;
+  background:#fff;
+  /* css3 */
+  /*
+  NOTES:
+  -webkit-border-radius:240px 140px; // produces oval in safari 4 and chrome 4
+  -webkit-border-radius:240px / 140px; // produces oval in chrome 4 (again!) but not supported in safari 4
+  Not correct application of the current spec, therefore, using longhand to avoid future problems with webkit corrects this
+  */
+  -webkit-border-top-left-radius:340px 240px;
+  -webkit-border-top-right-radius:340px 240px;
+  -webkit-border-bottom-right-radius:340px 240px;
+  -webkit-border-bottom-left-radius:340px 240px;
+  -moz-border-radius:340px / 240px;
+  border-radius:340px / 240px;
+}
+
+/* creates larger curve */
+.oval-speech-border:before {
+  content:"";
+  position:absolute;
+  z-index:2;
+  bottom:-40px;
+  right:50%;
+  width:50px;
+  height:30px;
+  border-style:solid;
+  border-width:0 10px 10px 0;
+  border-color:#f3961c;
+  margin-right:-10px;
+  background:transparent;
+  /* css3 */
+  -webkit-border-bottom-right-radius:80px 50px;
+  -moz-border-radius-bottomright:80px 50px;
+  border-bottom-right-radius:80px 50px;
+  /* reduce the damage in FF3.0 */
+  display:block;
+}
+
+/* creates smaller curve */
+.oval-speech-border:after {
+  content:"";
+  position:absolute;
+  z-index:2;
+  bottom:-40px;
+  right:50%;
+  width:20px;
+  height:31px;
+  border-style:solid;
+  border-width:0 10px 10px 0;
+  border-color:#f3961c;
+  margin-right:20px;
+  background:transparent;
+  /* css3 */
+  -webkit-border-bottom-right-radius:40px 50px;
+  -moz-border-radius-bottomright:40px 50px;
+  border-bottom-right-radius:40px 50px;
+  /* reduce the damage in FF3.0 */
+  display:block;
+}
+
+/* creates a small circle to produce a rounded point where the two curves meet */
+.oval-speech-border > :first-child:before {
+  content:"";
+  position:absolute;
+  z-index:1;
+  bottom:-40px;
+  right:50%;
+  width:10px;
+  height:10px;
+  margin-right:45px;
+  background:#f3961c;
+  /* css3 */
+  -webkit-border-radius:10px;
+  -moz-border-radius:10px;
+  border-radius:10px;
+}
+
+/* creates a white rectangle to cover part of the oval border*/
+.oval-speech-border > :first-child:after {
+  content:"";
+  position:absolute;
+  z-index:1;
+  bottom:-10px;
+  right:50%;
+  width:30px;
+  height:15px;
+  background:#fff;
+}
+
+input[type=submit] {
+  -webkit-border-radius: 28;
+  -moz-border-radius: 28;
+  border-radius: 28px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  background: #f3961c;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+
+}
+
+input[type=submit]:hover {
+  background: #86ba5f;
+  text-decoration: none;
+}

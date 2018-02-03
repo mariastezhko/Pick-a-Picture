@@ -11,6 +11,8 @@
       {% endfor %}
     {% endif %}
 
+    <a href="/logout">Log Out</a>
+
     <form action='/submitcriteria' method='post'>
       {% csrf_token %}
       Name: <input type='text' name='name' required>

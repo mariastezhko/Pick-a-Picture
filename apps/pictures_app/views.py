@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib import messages
-
+import random
 
 
 import bcrypt
@@ -11,100 +11,96 @@ def index(request):
     if request=='POST':
         return redirect('/')
     else:
-        return render(request, 'pictures_app/index.html', {"images": Image.objects.all()})
+        data = Image.objects.image_processor()
+        # images = []
+        # criteria = Criteria.objects.order_by('?').first()
+        # subcategories = random.sample(Subcategory.objects.filter(criteria=criteria),2)
+        # images_3 = random.sample(Image.objects.filter(subcategory=subcategories[0]),3)
+        # image_1 = random.sample(Image.objects.filter(subcategory=subcategories[1]),1)
+        # if image_1[0].subcategory.name == "wild_animals":
+        #     response = "Great Job! This is a wild animal, and other animals are domestic."
+        # elif image_1[0].subcategory.name == "domestic_animals":
+        #     response = "Great Job! This is a domestic animal, and other animals are wild."
+        # elif image_1[0].subcategory.name == "in_flight":
+        #     response = "Great Job! There is only one bird in flight, others are sitting on the branches."
+        # elif image_1[0].subcategory.name == "not_in_flight":
+        #     response = "Great Job! There is only one bird on the branch, others are flying."
+        # elif image_1[0].subcategory.name == "one_animal":
+        #     response = "Great Job! There is only one animal on this picture, and two animals on other pictures."
+        # elif image_1[0].subcategory.name == "two_animals":
+        #     response = "Great Job! There are two animals on this picture, and only one on other pictures."
+        # elif image_1[0].subcategory.name == "one_bird":
+        #     response = "Great Job! There is only one bird on this picture, and two birds on other pictures."
+        # elif image_1[0].subcategory.name == "two_birds":
+        #     response = "Great Job! There are two birds on this picture, and only one on other pictures."
+        #
+        # request.session['correct_answer'] = image_1[0].id
+        # correct_answer = image_1[0].id
+        #
+        # images = images_3 + image_1
+        # random.shuffle(images)
+        return render(request, 'pictures_app/index.html', data)
 
 def renderForm(request):
-    return render(request, 'pictures_app/upload.html')
+    try:
+        request.session['user_id']
+        return render(request, 'pictures_app/upload.html')
+    except:
+        return redirect('/login')
+
 
 def submitCriteria(request):
     Criteria.objects.create(name=request.POST['name'])
     return redirect('/upload')
 
+
 def submitSubcategory(request):
     subcategory = Subcategory.objects.create(name=request.POST['name'])
     criteria = Criteria.objects.get(name=request.POST['criteria'])
     criteria.subcategories.add(subcategory)
-    print subcategory
     return redirect('/upload')
 
+
 def submitImage(request):
-    print request.FILES['image']
     subcategory = Subcategory.objects.get(name=request.POST['subcategory'])
     image = Image.objects.create(image=request.FILES['image'], name=request.POST['name'])
     subcategory.images.add(image)
-
     return redirect('/upload')
 
 
-
 def processRegistration(request):
-    new_user = User.objects.user_validator(request.POST)
-    print new_user
-    if new_user[0] == True:
-        messages.success(request, 'Welcome, ' + new_user[1].first_name)
-        request.session['user_id'] = new_user[1].id
-        return redirect('/quotes')
+    if request.method == 'POST':
+        print "goto validation"
+        new_user = User.objects.user_validator(request.POST)
+        print new_user
+        if new_user[0] == True:
+            messages.success(request, 'Welcome, ' + new_user[1].name)
+            request.session['user_id'] = new_user[1].id
+            return redirect('/upload')
+        else:
+            for error in new_user[1]:
+                messages.error(request, error)
+            return redirect('/login')
     else:
-        for error in new_user[1]:
-            messages.error(request, error)
-        return redirect('/main')
+        return render(request, 'pictures_app/register.html')
 
 
 def processLogin(request):
-    this_user = User.objects.login_validator(request.POST)
-    if this_user[0] == True:
-        messages.success(request, 'Welcome, ' + this_user[1].first_name)
-        request.session['user_id'] = this_user[1].id
-        return redirect('/quotes')
+    if request.method == 'POST':
+        this_user = User.objects.login_validator(request.POST)
+        if this_user[0] == True:
+            messages.success(request, 'Welcome, ' + this_user[1].name)
+            request.session['user_id'] = this_user[1].id
+            return redirect('/upload')
+        else:
+            for error in this_user[1]:
+                messages.error(request, error)
+            return redirect('/login')
     else:
-        for error in this_user[1]:
-            messages.error(request, error)
-        return redirect('/main')
-
-
-def showQuotes(request):
-    if request.session['user_id']:
-        quotes = Quote.objects.all().order_by('-created_at')
-        print "********************", quotes
-        this_user = User.objects.get(id=request.session['user_id'])
-        print "FAVORITES", this_user.favorited_quotes.all()
-        quotable_quotes = []
-        for quote in quotes:
-            favorited = False
-            for user in quote.favorited_users.all():
-                if user.id == request.session['user_id']:
-                    favorited = True
-            if favorited == False:
-                quotable_quotes.append(quote)
-        return render(request, 'quotes_app/quotes.html',
-                {"quotes": quotable_quotes, "user": this_user,
-                 "favorites": this_user.favorited_quotes.all()})
-    else:
-        return redirect('/main')
-
-def submitQuote(request):
-
-    errors = []
-    if (len(request.POST['author']) < 3):
-        errors.append("Quoted by: Must be more than 3 characters!")
-    if (len(request.POST['quote']) < 10):
-        errors.append("Quote must be more than 10 characters!")
-    if len(errors) == 0:
-        new_quote = Quote.objects.create(quote=request.POST['quote'],
-                author=request.POST['author'])
-        this_user = User.objects.get(id=request.session['user_id'])
-        this_user.uploaded_quotes.add(new_quote)
-        print this_user.uploaded_quotes.all()
-        return redirect('/quotes')
-    else:
-        for error in errors:
-            messages.error(request, error)
-        return redirect('/quotes')
-
-
+        return render(request, 'pictures_app/login.html')
 
 
 def logout(request):
     request.session['user_id'] = None
     messages.error(request, "You have successfully logged out")
-    return redirect('/main')
+    return redirect('/login')
