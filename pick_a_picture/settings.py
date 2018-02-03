@@ -19,17 +19,17 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os
 #BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-STATIC_URL = '/static/'
+#STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
-)
+#STATICFILES_DIRS = (
+#    os.path.join(BASE_DIR, "static"),
+#)
 
-MEDIA_ROOT = (
-BASE_DIR
-)
-
-MEDIA_URL = '/media/'
+# MEDIA_ROOT = (
+# BASE_DIR
+# )
+#
+# MEDIA_URL = '/media/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
