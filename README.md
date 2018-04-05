@@ -2,6 +2,8 @@
 
 - - - -
 
+![alt map](https://raw.githubusercontent.com/mariastezhko/Pick-a-Picture/master/static/img/pick-a-picture.png)
+
 ## Description
 
 This single page application is a logic game for kids.
